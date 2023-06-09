@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Employee",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "address": {
+      "$ref": "#/definitions/Address"
+    },
+    "user": {
+      "$ref": "#/definitions/User"
+    },
+    "employeeType": {
+      "type": "string",
+      "enum": [
+        "JUNIOR",
+        "SENIOR",
+        "NEWBIE"
+      ]
+    },
+    "employeeType2": {
+      "type": "string"
+    }
+  },
+  "definitions": {
+    "Address": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "streetNo": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}
