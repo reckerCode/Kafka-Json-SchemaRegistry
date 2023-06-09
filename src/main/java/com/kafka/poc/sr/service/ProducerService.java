@@ -27,17 +27,22 @@ public class ProducerService {
         employee.setEmployeeType2("Test");
         User user = new User();
         user.setAge(5);
-//        user.setLastName("Test");
-//        user.setFirstName("test");
         employee.setUser(user);
         Address address = new Address();
         address.setCity("testCity");
         address.setCountry("TestCountry");
         employee.setAddress(address);
 
-        String schemaId = "3";
         ProducerRecord<String, Employee> producerRecord = new ProducerRecord<>("ppm-test-topic3", employee);
-//        producerRecord.headers().add("schemaId", schemaId.getBytes());
+        SendResult<String, Employee> stringEmployeeSendResult = stringEmployeeKafkaTemplate.send(producerRecord).get();
+        log.info("Timestamp: {}", stringEmployeeSendResult.getRecordMetadata().timestamp());
+        log.info("Partition: {}", stringEmployeeSendResult.getRecordMetadata().partition());
+        log.info("Topic: {}", stringEmployeeSendResult.getRecordMetadata().topic());
+        log.info("serializedValueSize: {}", stringEmployeeSendResult.getRecordMetadata().serializedValueSize());
+    }
+
+    public void testServiceClass(Employee employee) throws ExecutionException, InterruptedException {
+        ProducerRecord<String, Employee> producerRecord = new ProducerRecord<>("ppm-test-topic3", employee);
         SendResult<String, Employee> stringEmployeeSendResult = stringEmployeeKafkaTemplate.send(producerRecord).get();
         log.info("Timestamp: {}", stringEmployeeSendResult.getRecordMetadata().timestamp());
         log.info("Partition: {}", stringEmployeeSendResult.getRecordMetadata().partition());

@@ -24,7 +24,9 @@ public class TestProducerConfig {
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaJsonSchemaSerializer.class.getName());
         configProps.put(KafkaJsonSchemaSerializerConfig.AUTO_REGISTER_SCHEMAS, false);
-        configProps.put(KafkaJsonSchemaSerializerConfig.USE_SCHEMA_ID, 3);
+//        configProps.put(KafkaJsonSchemaSerializerConfig.USE_SCHEMA_ID, 3);
+        configProps.put(KafkaJsonSchemaSerializerConfig.USE_LATEST_VERSION, true);
+        configProps.put(KafkaJsonSchemaSerializerConfig.LATEST_COMPATIBILITY_STRICT, false);
         configProps.put(KafkaJsonSchemaSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
         configProps.put(KafkaJsonSchemaSerializerConfig.ONEOF_FOR_NULLABLES, false);
         return configProps;
