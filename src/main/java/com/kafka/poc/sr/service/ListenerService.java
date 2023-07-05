@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ListenerService {
 
-    @KafkaListener(containerFactory = "kafkaListenerContainerFactory",
-            topics = "ppm-test-topic3",
-            clientIdPrefix = "test1",
-            groupId = "employeeRecordSubscriber")
+//    @KafkaListener(containerFactory = "kafkaListenerContainerFactory",
+//            topics = "ppm-test-topic3",
+//            clientIdPrefix = "test1",
+//            groupId = "employeeRecordSubscriber")
     public void kafkaListenerService(ConsumerRecord<String, Employee> record) {
         log.info("Consumer record headers: {}", record.headers());
         log.info("Consumer record value: {}", record.value());

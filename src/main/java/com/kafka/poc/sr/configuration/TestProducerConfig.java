@@ -1,5 +1,6 @@
 package com.kafka.poc.sr.configuration;
 
+import com.kafka.poc.sr.domain.Developer;
 import com.kafka.poc.sr.domain.Employee;
 import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer;
 import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializerConfig;
@@ -22,24 +23,24 @@ public class TestProducerConfig {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://localhost:9092");
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaJsonSchemaSerializer.class.getName());
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, CustomJsonSchemaSerializer.class.getName());
         configProps.put(KafkaJsonSchemaSerializerConfig.AUTO_REGISTER_SCHEMAS, false);
-//        configProps.put(KafkaJsonSchemaSerializerConfig.USE_SCHEMA_ID, 3);
         configProps.put(KafkaJsonSchemaSerializerConfig.USE_LATEST_VERSION, true);
         configProps.put(KafkaJsonSchemaSerializerConfig.LATEST_COMPATIBILITY_STRICT, false);
+        configProps.put(KafkaJsonSchemaSerializerConfig.USE_SCHEMA_ID, 13);
         configProps.put(KafkaJsonSchemaSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
         configProps.put(KafkaJsonSchemaSerializerConfig.ONEOF_FOR_NULLABLES, false);
         return configProps;
     }
 
 
-    public ProducerFactory<String, Employee> getProducerFactory() {
+    public ProducerFactory<String, Developer> getProducerFactory() {
         Map<String, Object> configProperties = producerFactory();
         return new DefaultKafkaProducerFactory<>(configProperties);
     }
 
     @Bean(value = "getEmployeeKafkaTemplate")
-    public KafkaTemplate<String, Employee> getEmployeeKafkaTemplate() {
+    public KafkaTemplate<String, Developer> getEmployeeKafkaTemplate() {
         return new KafkaTemplate<>(getProducerFactory());
     }
 

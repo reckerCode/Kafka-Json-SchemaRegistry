@@ -1,6 +1,7 @@
 package com.kafka.poc.sr.service;
 
 import com.kafka.poc.sr.domain.Address;
+import com.kafka.poc.sr.domain.Developer;
 import com.kafka.poc.sr.domain.Employee;
 import com.kafka.poc.sr.domain.User;
 import com.kafka.poc.sr.domain.enums.EmployeeType;
@@ -19,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 public class ProducerService {
     @Qualifier("getEmployeeKafkaTemplate")
     @Autowired
-    private KafkaTemplate<String, Employee> stringEmployeeKafkaTemplate;
+    private KafkaTemplate<String, Developer> stringEmployeeKafkaTemplate;
 
     public void testServiceClass() throws ExecutionException, InterruptedException {
         Employee employee = new Employee();
@@ -33,17 +34,18 @@ public class ProducerService {
         address.setCountry("TestCountry");
         employee.setAddress(address);
 
-        ProducerRecord<String, Employee> producerRecord = new ProducerRecord<>("ppm-test-topic3", employee);
-        SendResult<String, Employee> stringEmployeeSendResult = stringEmployeeKafkaTemplate.send(producerRecord).get();
-        log.info("Timestamp: {}", stringEmployeeSendResult.getRecordMetadata().timestamp());
-        log.info("Partition: {}", stringEmployeeSendResult.getRecordMetadata().partition());
-        log.info("Topic: {}", stringEmployeeSendResult.getRecordMetadata().topic());
-        log.info("serializedValueSize: {}", stringEmployeeSendResult.getRecordMetadata().serializedValueSize());
+
+//        ProducerRecord<String, Developer> producerRecord = new ProducerRecord<>("ppm-test-topic3", employee);
+//        SendResult<String, Developer> stringEmployeeSendResult = stringEmployeeKafkaTemplate.send(producerRecord).get();
+//        log.info("Timestamp: {}", stringEmployeeSendResult.getRecordMetadata().timestamp());
+//        log.info("Partition: {}", stringEmployeeSendResult.getRecordMetadata().partition());
+//        log.info("Topic: {}", stringEmployeeSendResult.getRecordMetadata().topic());
+//        log.info("serializedValueSize: {}", stringEmployeeSendResult.getRecordMetadata().serializedValueSize());
     }
 
-    public void testServiceClass(Employee employee) throws ExecutionException, InterruptedException {
-        ProducerRecord<String, Employee> producerRecord = new ProducerRecord<>("ppm-test-topic3", employee);
-        SendResult<String, Employee> stringEmployeeSendResult = stringEmployeeKafkaTemplate.send(producerRecord).get();
+    public void testServiceClass(Developer employee) throws ExecutionException, InterruptedException {
+        ProducerRecord<String, Developer> producerRecord = new ProducerRecord<>("test-devloper-topic2", employee);
+        SendResult<String, Developer> stringEmployeeSendResult = stringEmployeeKafkaTemplate.send(producerRecord).get();
         log.info("Timestamp: {}", stringEmployeeSendResult.getRecordMetadata().timestamp());
         log.info("Partition: {}", stringEmployeeSendResult.getRecordMetadata().partition());
         log.info("Topic: {}", stringEmployeeSendResult.getRecordMetadata().topic());

@@ -1,0 +1,20 @@
+{
+  "developerMetadata": {
+    "requestId": "test_9c51c56804aa",
+    "developerType": "test_cb58ab7f8f04"
+  },
+  "developerDetailPayload": {
+    "address": {
+      "city": "test_f2018c1ec33d",
+      "country": "test_69bebac97091",
+      "streetNo": "test_dcfd6f1331ff"
+    },
+    "user": {
+      "firstName": "test_f66455a13918",
+      "lastName": "test_f23b4aba6274",
+      "age": 97
+    },
+    "employeeType": "NEWBIE",
+    "employeeType2": "test_df4d784c3d40"
+  }
+}

@@ -1,5 +1,6 @@
 package com.kafka.poc.sr.controller;
 
+import com.kafka.poc.sr.domain.Developer;
 import com.kafka.poc.sr.domain.Employee;
 import com.kafka.poc.sr.service.ProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class AdminController {
     }
 
     @PostMapping("/test")
-    public void testServiceClassController2(@RequestBody Employee employee) throws ExecutionException, InterruptedException {
+    public void testServiceClassController2(@RequestBody Developer employee) throws ExecutionException, InterruptedException {
         serviceClass.testServiceClass(employee);
     }
 }
