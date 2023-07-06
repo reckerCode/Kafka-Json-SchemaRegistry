@@ -9,7 +9,10 @@ import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 import io.confluent.kafka.schemaregistry.json.JsonSchemaProvider;
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializerConfig;
+import io.confluent.kafka.serializers.subject.RecordNameStrategy;
+import io.confluent.kafka.serializers.subject.TopicNameStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.serialization.Serializer;
@@ -72,6 +75,7 @@ public class CustomJsonSchemaSerializer<T> implements Serializer<T> {
                 throw new RuntimeException("Object failed JSON schema validation: " + validationResult.toString());
             }
             // Serialize the object into a JSON byte array
+            log.info("Schema: {}", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema));
             return objectMapper.writeValueAsBytes(data);
 
         } catch (IOException | RestClientException e) {
