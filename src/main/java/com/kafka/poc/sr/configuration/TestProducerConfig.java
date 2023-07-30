@@ -1,8 +1,6 @@
 package com.kafka.poc.sr.configuration;
 
 import com.kafka.poc.sr.domain.Developer;
-import com.kafka.poc.sr.domain.Employee;
-import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer;
 import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializerConfig;
 import io.confluent.kafka.serializers.subject.RecordNameStrategy;
 import io.confluent.kafka.serializers.subject.TopicNameStrategy;
@@ -27,11 +25,10 @@ public class TestProducerConfig {
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, CustomJsonSchemaSerializer.class.getName());
         configProps.put(KafkaJsonSchemaSerializerConfig.KEY_SUBJECT_NAME_STRATEGY, TopicNameStrategy.class.getName());
-        configProps.put(KafkaJsonSchemaSerializerConfig.VALUE_SUBJECT_NAME_STRATEGY_DEFAULT, RecordNameStrategy.class.getName());
+        configProps.put(KafkaJsonSchemaSerializerConfig.VALUE_SUBJECT_NAME_STRATEGY_DEFAULT, TopicNameStrategy.class.getName());
         configProps.put(KafkaJsonSchemaSerializerConfig.AUTO_REGISTER_SCHEMAS, false);
         configProps.put(KafkaJsonSchemaSerializerConfig.USE_LATEST_VERSION, true);
         configProps.put(KafkaJsonSchemaSerializerConfig.LATEST_COMPATIBILITY_STRICT, true);
-        configProps.put(KafkaJsonSchemaSerializerConfig.USE_SCHEMA_ID, 13);
         configProps.put(KafkaJsonSchemaSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
         configProps.put(KafkaJsonSchemaSerializerConfig.ONEOF_FOR_NULLABLES, false);
         return configProps;

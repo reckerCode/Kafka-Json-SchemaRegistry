@@ -3,14 +3,13 @@ package com.kafka.poc.sr.service;
 import com.kafka.poc.sr.domain.Employee;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class ListenerService {
 
-//    @KafkaListener(containerFactory = "kafkaListenerContainerFactory",
+    //    @KafkaListener(containerFactory = "kafkaListenerContainerFactory",
 //            topics = "ppm-test-topic3",
 //            clientIdPrefix = "test1",
 //            groupId = "employeeRecordSubscriber")

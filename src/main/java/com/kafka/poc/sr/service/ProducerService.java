@@ -22,7 +22,7 @@ public class ProducerService {
     public void testServiceClass(Developer employee) throws ExecutionException, InterruptedException {
         try {
             String string = UUID.randomUUID().toString();
-            ProducerRecord<String, Developer> producerRecord = new ProducerRecord<>("test-topic-221", string, employee);
+            ProducerRecord<String, Developer> producerRecord = new ProducerRecord<>("test-topic-221", employee);
             SendResult<String, Developer> stringEmployeeSendResult = stringEmployeeKafkaTemplate.send(producerRecord).get();
             log.info("Timestamp: {}", stringEmployeeSendResult.getRecordMetadata().timestamp());
             log.info("Partition: {}", stringEmployeeSendResult.getRecordMetadata().partition());

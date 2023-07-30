@@ -2,9 +2,7 @@ package com.kafka.poc.sr.configuration;
 
 
 import com.kafka.poc.sr.domain.Developer;
-import com.kafka.poc.sr.domain.Employee;
 import io.confluent.kafka.serializers.json.KafkaJsonSchemaDeserializer;
-import io.confluent.kafka.serializers.json.KafkaJsonSchemaDeserializerConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -25,10 +23,7 @@ public class KafkaListenerConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-groupId1");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaJsonSchemaDeserializer.class);
-        props.put(KafkaJsonSchemaDeserializerConfig.AUTO_REGISTER_SCHEMAS, false);
-        props.put(KafkaJsonSchemaDeserializerConfig.USE_LATEST_VERSION, true);
-        props.put(KafkaJsonSchemaDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, CustomJsonSchemaDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 

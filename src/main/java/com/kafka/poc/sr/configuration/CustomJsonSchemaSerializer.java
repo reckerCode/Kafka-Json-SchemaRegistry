@@ -6,25 +6,28 @@ import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.SchemaMetadata;
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 import io.confluent.kafka.schemaregistry.json.JsonSchemaProvider;
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
+import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer;
 import io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializerConfig;
-import io.confluent.kafka.serializers.subject.RecordNameStrategy;
-import io.confluent.kafka.serializers.subject.TopicNameStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.serialization.Serializer;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 @Slf4j
 public class CustomJsonSchemaSerializer<T> implements Serializer<T> {
 
     private ObjectMapper objectMapper;
+    protected static final byte MAGIC_BYTE = 0x0;
+    protected static final int idSize = 4;
 
     @Autowired
     private SchemaRegistryClient schemaRegistryClient;
@@ -40,6 +43,8 @@ public class CustomJsonSchemaSerializer<T> implements Serializer<T> {
         map.put(KafkaJsonSchemaSerializerConfig.ONEOF_FOR_NULLABLES, false);
         return map;
     }
+
+    KafkaJsonSchemaSerializer schemaSerializer;
 
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
@@ -62,8 +67,10 @@ public class CustomJsonSchemaSerializer<T> implements Serializer<T> {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
+            SchemaMetadata latestSchemaMetadata = schemaRegistryClient.getLatestSchemaMetadata(topic + "-value");
             // Fetch the latest version of the schema from the Schema Registry
-            String schema = schemaRegistryClient.getLatestSchemaMetadata(topic + "-value").getSchema();
+            String schema = latestSchemaMetadata.getSchema();
+            int id = latestSchemaMetadata.getId();
             log.info(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema));
             // Validate object against schema
             com.networknt.schema.JsonSchema validatorSchema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schema);
@@ -76,7 +83,15 @@ public class CustomJsonSchemaSerializer<T> implements Serializer<T> {
             }
             // Serialize the object into a JSON byte array
             log.info("Schema: {}", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema));
-            return objectMapper.writeValueAsBytes(data);
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            out.write(MAGIC_BYTE);
+            out.write(ByteBuffer.allocate(idSize).putInt(id).array());
+            out.write(objectMapper.writeValueAsBytes(data));
+            byte[] bytes = out.toByteArray();
+            out.close();
+            return bytes;
+//            return objectMapper.writeValueAsBytes(data);
 
         } catch (IOException | RestClientException e) {
             throw new RuntimeException("Error serializing JSON message", e);
